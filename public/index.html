@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Submission</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+
+    body {
+      background-image: url('bg.jpeg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px; 
+    }
+    .form-group label {
+      font-size: large;
+      font-weight: bold;
+      color: white; 
+    }
+    .success-message {
+      display: none;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container" id="form-container">
+
+    <h1 class="text-center text-white" style="margin-bottom: 30px;">Internship Registration</h1> 
+
+    <form id="contact-form" action="/send" method="POST" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+      </div>
+
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="resume">Resume</label>
+        <input type="file" id="resume" name="resume" class="form-control-file" accept="application/pdf" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Send</button>
+
+    </form>
+
+  </div>
+
+  <div class="container success-message" id="success-container">
+
+    <h1 class="text-center text-white">Your message was sent successfully!</h1> 
+    
+  </div>
+
+  <script>
+
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var formData = new FormData(this);
+
+      fetch('/send', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('form-container').style.display = 'none';
+          document.getElementById('success-container').style.display = 'block';
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to send message. Please try again.');
+      });
+    });
+
+  </script>
+
+</body>
+</html>
